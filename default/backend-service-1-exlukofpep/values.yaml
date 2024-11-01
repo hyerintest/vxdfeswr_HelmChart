@@ -1,0 +1,56 @@
+service:
+  port:
+    name: http
+    l4_protocol: TCP
+    port: 8080
+    targetPort: 8080
+  label: backend-service-1-exlukofpep
+  name: backend-service-1-exlukofpep
+  selector: backend-service-1-exlukofpep
+  type:
+  - ClusterIP
+  - NodePort
+namespace: -@namespace@-
+pvc:
+  name: pvc-backend-service-1-exlukofpep
+  storageClass: tlc-block-sc
+  size: 5Gi
+  accessMode: ReadWriteOnce
+deployment:
+  app:
+    name: backend-service-1-exlukofpep
+    type: springboot
+  replicas: -@replicas@-
+  update:
+    type: RollingUpdate
+  repo:
+    url: -@imageRepoName@-
+  image:
+    name: backend-service-1-exlukofpep
+    tag: lastest
+    secret: -@repoSecret@-
+  container:
+    name: backend-service-1-exlukofpep
+    port: 8080
+  volume:
+    name: pvc-backend-service-1-exlukofpep
+  resource:
+    request:
+      memory: -@requestMemory@-
+      cpu: -@requestCpu@-
+    limits:
+      memory: -@limitsMemory@-
+      cpu: -@limitsCpu@-
+  backing: 
+    mariadb:
+      name: secret-mariadb-service-1-iobdbdqo4e
+  secret:
+    name: []
+  configmap:
+    name: []
+  hpa:
+    name: hpa-backend-service-1-exlukofpep
+    minReplicas: -@minReplicas@-
+    maxReplicas: -@maxReplicas@-
+    cpu: -@cpuAutoScale@-
+    memory: -@memAutoScale@-
